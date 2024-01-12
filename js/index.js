@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fs from "fs";
 
 import { HumanMessage } from "@langchain/core/messages";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
@@ -16,104 +16,76 @@ dotenv.config();
  *
  */
 
-// Text
-const model = new ChatGoogleGenerativeAI({
-  modelName: "gemini-pro",
-  maxOutputTokens: 2048,
-  safetySettings: [
-    {
-      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-    },
-  ],
-});
-
-// Batch and stream are also supported
-const res = await model.invoke([
-  [
-    "human",
-    "What would be a good company name for a company that makes colorful socks?",
-  ],
-]);
-
-console.log(res);
-
-/*
-  AIMessage {
-    content: '1. Rainbow Soles\n' +
-      '2. Toe-tally Colorful\n' +
-      '3. Bright Sock Creations\n' +
-      '4. Hue Knew Socks\n' +
-      '5. The Happy Sock Factory\n' +
-      '6. Color Pop Hosiery\n' +
-      '7. Sock It to Me!\n' +
-      '8. Mismatched Masterpieces\n' +
-      '9. Threads of Joy\n' +
-      '10. Funky Feet Emporium\n' +
-      '11. Colorful Threads\n' +
-      '12. Sole Mates\n' +
-      '13. Colorful Soles\n' +
-      '14. Sock Appeal\n' +
-      '15. Happy Feet Unlimited\n' +
-      '16. The Sock Stop\n' +
-      '17. The Sock Drawer\n' +
-      '18. Sole-diers\n' +
-      '19. Footloose Footwear\n' +
-      '20. Step into Color',
-    name: 'model',
-    additional_kwargs: {}
-  }
-*/
-
-// Multi-modal
-const vision = new ChatGoogleGenerativeAI({
-  modelName: "gemini-pro-vision",
-  maxOutputTokens: 2048,
-});
-const image = fs.readFileSync("./hotdog.jpg").toString("base64");
-const input2 = [
-  new HumanMessage({
-    content: [
-      {
-        type: "text",
-        text: "Describe the following image.",
-      },
-      {
-        type: "image_url",
-        image_url: `data:image/png;base64,${image}`,
-      },
-    ],
-  }),
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
 ];
 
-const res2 = await vision.invoke(input2);
+// Text - gemini-pro model
+await generalPrompt(
+  "What would be a good company name for a company that makes colorful socks?"
+);
 
-console.log(res2);
+//  Multi-modal - gemini-pro-vision model
+await describeImage(fs.readFileSync("./hotdog.jpg").toString("base64"));
 
-/*
-  AIMessage {
-    content: ' The image shows a hot dog in a bun. The hot dog is grilled and has a dark brown color. The bun is toasted and has a light brown color. The hot dog is in the center of the bun.',
-    name: 'model',
-    additional_kwargs: {}
-  }
-*/
+async function generalPrompt(prompt) {
+  const model = new ChatGoogleGenerativeAI({
+    modelName: "gemini-pro",
+    maxOutputTokens: 2048,
+    safetySettings,
+    temperature: 0.9,
+    topK: 0,
+    topP: 0.9,
+  });
 
-// Multi-modal streaming
-const res3 = await vision.stream(input2);
-
-for await (const chunk of res3) {
-  console.log(chunk);
+  // Batch and stream are also supported
+  const res = await model.invoke([["human", prompt]]);
+  console.log(res);
 }
 
-/*
-  AIMessageChunk {
-    content: ' The image shows a hot dog in a bun. The hot dog is grilled and has grill marks on it. The bun is toasted and has a light golden',
-    name: 'model',
-    additional_kwargs: {}
+async function describeImage(imageUrl) {
+  const vision = new ChatGoogleGenerativeAI({
+    modelName: "gemini-pro-vision",
+    maxOutputTokens: 2048,
+    safetySettings,
+  });
+
+  const input2 = [
+    new HumanMessage({
+      content: [
+        {
+          type: "text",
+          text: "Describe the following image.",
+        },
+        {
+          type: "image_url",
+          image_url: `data:image/png;base64,${imageUrl}`,
+        },
+      ],
+    }),
+  ];
+
+  const res = await vision.invoke(input2);
+  console.log(res);
+
+  // Multi-modal streaming
+  const streamRes = await vision.stream(input2);
+  for await (const chunk of streamRes) {
+    console.log(chunk);
   }
-  AIMessageChunk {
-    content: ' brown color. The hot dog is in the center of the bun.',
-    name: 'model',
-    additional_kwargs: {}
-  }
-*/
+}
