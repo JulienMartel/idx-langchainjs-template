@@ -1,5 +1,3 @@
-A template for getting started with SvelteKit in Project IDX
-
 <a href="https://idx.google.com/new?template=https://github.com/JulienMartel/idx-langchainjs-template">
   <img
     alt="Open in Project IDX"
