@@ -48,9 +48,6 @@ async function generalPrompt(prompt) {
     modelName: "gemini-pro",
     maxOutputTokens: 2048,
     safetySettings,
-    temperature: 0.9,
-    topK: 0,
-    topP: 0.9,
   });
 
   // Batch and stream are also supported
