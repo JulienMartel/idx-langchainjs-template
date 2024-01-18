@@ -20,7 +20,7 @@ dotenv.config();
  *
  */
 
-const safetySettings = [
+const safetySettings: SafetySetting[] = [
   {
     category: HarmCategory.HARM_CATEGORY_HARASSMENT,
     threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
@@ -37,7 +37,7 @@ const safetySettings = [
     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
     threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
   },
-] satisfies SafetySetting[];
+];
 
 // Text - gemini-pro model
 await generalPrompt(
@@ -50,8 +50,11 @@ await describeImage(fs.readFileSync("./hotdog.jpg").toString("base64"));
 async function generalPrompt(prompt: string) {
   const model = new ChatGoogleGenerativeAI({
     modelName: "gemini-pro",
-    maxOutputTokens: 2048,
     safetySettings,
+    maxOutputTokens: 2048,
+    temperature: 0.4,
+    topK: 32,
+    topP: 1,
   });
 
   // Batch and stream are also supported
@@ -62,8 +65,11 @@ async function generalPrompt(prompt: string) {
 async function describeImage(imageUrl: string) {
   const vision = new ChatGoogleGenerativeAI({
     modelName: "gemini-pro-vision",
-    maxOutputTokens: 2048,
     safetySettings,
+    maxOutputTokens: 2048,
+    temperature: 0.4,
+    topK: 32,
+    topP: 1,
   });
 
   const input2 = [

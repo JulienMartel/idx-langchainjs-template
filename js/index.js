@@ -46,8 +46,11 @@ await describeImage(fs.readFileSync("./hotdog.jpg").toString("base64"));
 async function generalPrompt(prompt) {
   const model = new ChatGoogleGenerativeAI({
     modelName: "gemini-pro",
-    maxOutputTokens: 2048,
     safetySettings,
+    maxOutputTokens: 2048,
+    temperature: 0.4,
+    topK: 32,
+    topP: 1,
   });
 
   // Batch and stream are also supported
@@ -58,8 +61,11 @@ async function generalPrompt(prompt) {
 async function describeImage(imageUrl) {
   const vision = new ChatGoogleGenerativeAI({
     modelName: "gemini-pro-vision",
-    maxOutputTokens: 2048,
     safetySettings,
+    maxOutputTokens: 2048,
+    temperature: 0.4,
+    topK: 32,
+    topP: 1,
   });
 
   const input2 = [
