@@ -5,9 +5,9 @@
 
       mkdir "$out"/.idx
       cp ${./shared/dev.nix} "$out"/.idx
-      cp ${./shared/hotdog.jpg} "$out"
-      cp ${./shared/gitignore} "$out"/.gitignore
-      cp ${./shared/example.env} "$out"/.env
+      mv ${./shared/hotdog.jpg} "$out"
+      mv ${./shared/gitignore} "$out"/.gitignore
+      mv ${./shared/example.env} "$out"/.env
 
       chmod -R +w "$out"
     '';
