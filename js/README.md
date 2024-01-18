@@ -10,7 +10,7 @@ This project is a LangChain JS and Gemini application developed in JavaScript. I
 You can start the application using:
 
 ```bash
-npm start
+npm run start
 ```
 
 ### Usage
