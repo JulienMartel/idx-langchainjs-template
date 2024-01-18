@@ -17,7 +17,7 @@ npm run build
 You can start the application using:
 
 ```bash
-npm start
+npm run start
 ```
 
 For development purposes, you can use the following command to watch for changes in your TypeScript files and automatically rebuild the project:
