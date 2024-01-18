@@ -3,7 +3,9 @@
     bootstrap = ''
       cp -rf ${if typescript then ./ts else ./js } "$WS_NAME"
 
+      chmod -R +w "$WS_NAME"
       mkdir "$WS_NAME"/.idx
+      
       cp ${./shared/dev.nix} "$WS_NAME"/.idx/
       cp ${./shared/hotdog.jpg} "$WS_NAME"/hotdog.jpg
       cp ${./shared/gitignore} "$WS_NAME"/.gitignore
