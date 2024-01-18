@@ -6,8 +6,8 @@
       mkdir "$out"/.idx
       cp ${./shared/dev.nix} "$out"/.idx
       cp ${./shared/hotdog.jpg} "$out"
-      cp ${./shared/.gitignore} "$out"
-      cp ${./shared/.example.env} "$out"/.env
+      cp ${./shared/gitignore} "$out"/.gitignore
+      cp ${./shared/example.env} "$out"/.env
 
       chmod -R +w "$out"
     '';
