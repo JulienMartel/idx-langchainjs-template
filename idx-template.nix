@@ -5,8 +5,8 @@
 
       chmod -R +w "$WS_NAME"
       mkdir "$WS_NAME"/.idx
-      
-      cp ${./shared/dev.nix} "$WS_NAME"/.idx/
+
+      cp ${./shared/dev.nix} "$WS_NAME"/.idx/dev.nix
       cp ${./shared/hotdog.jpg} "$WS_NAME"/hotdog.jpg
       cp ${./shared/gitignore} "$WS_NAME"/.gitignore
       cp ${./shared/example.env} "$WS_NAME"/.env
