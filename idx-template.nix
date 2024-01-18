@@ -1,7 +1,6 @@
 { pkgs, typescript ? false, ... }: {
     packages = [];
     bootstrap = ''
-      mkdir -p "$out"
       cp -rf ${if typescript then ./ts else ./js } "$out"
 
       mkdir "$out"/.idx
