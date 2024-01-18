@@ -8,8 +8,8 @@ import {
   SafetySetting,
 } from "@google/generative-ai";
 
-// import * as dotenv from "dotenv";
-// dotenv.config();
+import * as dotenv from "dotenv";
+dotenv.config();
 
 /*
  * Before running this, you should make sure you have created a
